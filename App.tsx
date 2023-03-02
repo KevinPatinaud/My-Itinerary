@@ -8,22 +8,30 @@ import TripDayFormScreen from "./src/screen/TripDayForm/TripDayFormScreen";
 const Stack = createStackNavigator();
 
 export default function App() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Menu"
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="Menu" component={MenuScreen} />
-          <Stack.Screen name="ItineraryForm" component={ItineraryFormScreen} />
-          <Stack.Screen name="TripDayForm" component={TripDayFormScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
-  );
+  try {
+    return (
+      <SafeAreaView style={styles.container}>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Menu"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="Menu" component={MenuScreen} />
+            <Stack.Screen
+              name="ItineraryForm"
+              component={ItineraryFormScreen}
+            />
+            <Stack.Screen name="TripDayForm" component={TripDayFormScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    );
+  } catch ({ message }) {
+    alert(message);
+    return <></>;
+  }
 }
 
 const styles = StyleSheet.create({

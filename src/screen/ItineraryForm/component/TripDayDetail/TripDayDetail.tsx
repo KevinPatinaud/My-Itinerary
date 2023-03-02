@@ -57,15 +57,21 @@ const TripDayDetail = (props: TripDayDetailProps) => {
                 <TouchableHighlight
                   style={styles.dropActivityBtn}
                   onPress={() => {
-                    delete props.tripDay.activitiesSelected[index];
-                    props.onUpdate(props.tripDays);
+                    const result = [] as ActivitySelected[];
+                    props.tripDay.activitiesSelected.forEach((act, i) => {
+                      if (i !== index) result.push(act);
+                    });
+                    props.tripDay.activitiesSelected = result;
+                    props.onUpdate(props.tripDay);
                   }}
                 >
                   <AntDesign name={"closecircle"} size={20} color="#AAAAAA" />
                 </TouchableHighlight>
                 <Text style={styles.activtyDetail}>
                   <Text style={styles.selectableHour}>
-                    {act.startedHour.hour + "H" + act.startedHour.minutes}
+                    {act.startedHour &&
+                      act.startedHour !== null &&
+                      act.startedHour.hour + "H" + act.startedHour.minutes}
                   </Text>
                   {act.finishedHour && " - "}
                   <Text style={styles.selectableHour}>
@@ -112,9 +118,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   dropActivityBtn: {
-    //   position: "absolute",
-    right: 0,
-    zIndex: 999,
+    //  position: "absolute",
+    //  right: 0,
+    // zIndex: 999,
   },
   closeCross: {
     position: "absolute",

@@ -23,58 +23,67 @@ export interface TripDayListProps {
 const TripDayList = (props: TripDayListProps) => {
   const [daySelected, setDaySelected] = useState(null as number);
 
-  if (daySelected === null)
-    return (
-      <ScrollView style={props.viewStyle}>
-        {props.tripDays &&
-          props.tripDays.map((td, index) => (
-            <TouchableHighlight
-              onPress={() => {
-                setDaySelected(index);
-              }}
-            >
-              <View style={styles.dayView}>
-                <Text style={styles.dayTitle}>
-                  {"Jour " + (index + 1) + " : " + formatDate(td.day)}
-                </Text>
-                {td.activitiesSelected ? (
-                  td.activitiesSelected.map((activity: ActivitySelected) => (
-                    <Text style={styles.activtyDesc}>
-                      {activity.startedHour.hour +
-                        "h" +
-                        activity.startedHour.minutes +
-                        (activity.finishedHour
-                          ? " - " +
-                            activity.finishedHour.hour +
-                            "h" +
-                            activity.finishedHour.minutes
-                          : "") +
-                        " : " +
-                        activity.activity.title}
-                    </Text>
-                  ))
-                ) : (
-                  <Text style={styles.clickToModifyText}>
-                    {"(Cliquez ici pour ajouter une activité)"}
+  try {
+    if (daySelected === null)
+      return (
+        <ScrollView style={props.viewStyle}>
+          {props.tripDays &&
+            props.tripDays.map((td, index) => (
+              <TouchableHighlight
+                onPress={() => {
+                  setDaySelected(index);
+                }}
+              >
+                <View style={styles.dayView}>
+                  <Text style={styles.dayTitle}>
+                    {"Jour " + (index + 1) + " : " + formatDate(td.day)}
                   </Text>
-                )}
-              </View>
-            </TouchableHighlight>
-          ))}
-      </ScrollView>
-    );
-  else
-    return (
-      <TripDayDetail
-        viewStyle={props.viewStyle}
-        tripDay={props.tripDays[daySelected]}
-        onClose={() => {
-          setDaySelected(null);
-        }}
-        onUpdate={() => {}}
-        indexDay={daySelected}
-      />
-    );
+                  {td.activitiesSelected ? (
+                    td.activitiesSelected.map((activity: ActivitySelected) => (
+                      <Text style={styles.activtyDesc}>
+                        {activity.startedHour !== null &&
+                          activity.startedHour.hour +
+                            "h" +
+                            activity.startedHour.minutes +
+                            (activity.finishedHour
+                              ? " - " +
+                                activity.finishedHour.hour +
+                                "h" +
+                                activity.finishedHour.minutes
+                              : "") +
+                            " : " +
+                            activity.activity.title}
+                      </Text>
+                    ))
+                  ) : (
+                    <Text style={styles.clickToModifyText}>
+                      {"(Cliquez ici pour ajouter une activité)"}
+                    </Text>
+                  )}
+                </View>
+              </TouchableHighlight>
+            ))}
+        </ScrollView>
+      );
+    else
+      return (
+        <TripDayDetail
+          viewStyle={props.viewStyle}
+          tripDay={props.tripDays[daySelected]}
+          onClose={() => {
+            setDaySelected(null);
+          }}
+          onUpdate={(tripDay: TripDay) => {
+            props.tripDays[daySelected] = tripDay;
+            props.onUpdate(props.tripDays);
+          }}
+          indexDay={daySelected}
+        />
+      );
+  } catch (e) {
+    alert(e);
+    return <></>;
+  }
 };
 
 const styles = StyleSheet.create({
